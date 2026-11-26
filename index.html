@@ -2,11 +2,94 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="幸福小家">
+<meta name="theme-color" content="#527861">
 <title>幸福小家</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f5ef;color:#34463e;font-family:system-ui,sans-serif;padding-bottom:110px}
+header{background:#527861;color:white;padding:24px 20px}
+header h1{margin:0;font-size:26px}
+header small{color:#e5eee5}
+main{max-width:650px;margin:auto;padding:16px}
+.card{background:white;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 2px 8px #00000009;overflow-wrap:anywhere}
+.hero{background:#dfeade}
+h2{font-size:21px;margin:0 0 12px}
+input,textarea,select,button{font:inherit;border-radius:10px}
+input,textarea,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccd5cc;background:white;font-size:16px}
+button{border:0;padding:12px;background:#527861;color:white}
+.primary{width:100%;margin-top:8px}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:white;border-top:1px solid #ddd;padding:8px 0 calc(8px + env(safe-area-inset-bottom))}
+nav button{flex:1;background:white;color:#527861;font-size:12px;padding:8px 0}
+nav span{display:block;font-size:24px}
+.entry{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #eee}
+.entry input{width:20px}
+.entry div{flex:1;min-width:0}
+.del{background:#f4e5e5;color:#a34b4b}
+.amount{font-size:30px;font-weight:bold}
+small{color:#77847b}
+.page{display:none}
+.active{display:block}
+</style>
 </head>
 <body>
-<h1>幸福小家 V0.1</h1>
-<p>APP 網頁測試成功！</p>
+<header><h1>🏡 幸福小家</h1><small>FAMILY HOME · Version 0.1</small></header>
+<main>
+<section id="home" class="page active">
+<div class="card hero"><h2>平凡生活，幸福相伴</h2>一起照顧生活，珍惜每一天。</div>
+<div class="card" onclick="show('life')"><h2>📅 家庭生活</h2><p id="taskSummary"></p></div>
+<div class="card" onclick="show('money')"><h2>💰 家庭財務</h2><div class="amount" id="moneySummary"></div><small>累計支出</small></div>
+<div class="card" onclick="show('memory')"><h2>❤️ 家庭記憶</h2><p id="memorySummary"></p></div>
+</section>
+<section id="life" class="page">
+<div class="card"><h2>📅 家庭待辦事項</h2><input id="taskInput" placeholder="輸入待辦事項"><button class="primary" onclick="addTask()">＋ 新增事項</button></div>
+<div class="card" id="taskList"></div>
+</section>
+<section id="money" class="page">
+<div class="card hero"><h2>累計支出</h2><div class="amount" id="total"></div></div>
+<div class="card"><h2>💰 新增支出</h2><input id="expenseName" placeholder="支出項目"><input id="expenseAmount" type="number" min="1" placeholder="金額"><select id="category"><option>飲食</option><option>日用品</option><option>交通</option><option>教育</option><option>醫療</option><option>其他</option></select><button class="primary" onclick="addExpense()">儲存支出</button></div>
+<div class="card" id="expenseList"></div>
+</section>
+<section id="memory" class="page">
+<div class="card"><h2>❤️ 新增家庭回憶</h2><input id="memoryTitle" placeholder="回憶標題"><input id="memoryDate" type="date"><textarea id="memoryText" rows="4" placeholder="記錄生活點滴"></textarea><button class="primary" onclick="addMemory()">收藏回憶</button></div>
+<div id="memoryList"></div>
+</section>
+<section id="family" class="page">
+<div class="card"><h2>👥 我的家庭</h2><p>幸福小家</p><p>家庭成員：尚未設定</p><p>雲端同步：尚未啟用</p></div>
+<div class="card"><h2>版本資訊</h2><p>Version 0.1</p><small>本機儲存測試版本</small></div>
+</section>
+</main>
+<nav>
+<button onclick="show('home')"><span>🏠</span>首頁</button>
+<button onclick="show('life')"><span>📅</span>生活</button>
+<button onclick="show('money')"><span>💰</span>財務</button>
+<button onclick="show('memory')"><span>❤️</span>回憶</button>
+<button onclick="show('family')"><span>👥</span>家庭</button>
+</nav>
+<script>
+const $=id=>document.getElementById(id);
+function load(key){try{const a=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(a)?a:[]}catch(e){return []}}
+let tasks=load('fh_tasks'),expenses=load('fh_expenses'),memories=load('fh_memories');
+function save(){try{localStorage.setItem('fh_tasks',JSON.stringify(tasks));localStorage.setItem('fh_expenses',JSON.stringify(expenses));localStorage.setItem('fh_memories',JSON.stringify(memories))}catch(e){alert('資料無法儲存')}render()}
+function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0)}
+function esc(s){const d=document.createElement('div');d.textContent=String(s);return d.innerHTML}
+function addTask(){const text=$('taskInput').value.trim();if(!text)return;tasks.push({text,done:false});$('taskInput').value='';save()}
+function toggleTask(i){tasks[i].done=!tasks[i].done;save()}
+function addExpense(){const name=$('expenseName').value.trim(),amount=Number($('expenseAmount').value);if(!name||!Number.isFinite(amount)||amount<=0){alert('請輸入有效的項目及金額');return}expenses.unshift({name,amount,category:$('category').value});$('expenseName').value='';$('expenseAmount').value='';save()}
+function addMemory(){const title=$('memoryTitle').value.trim();if(!title)return;memories.unshift({title,date:$('memoryDate').value||new Date().toLocaleDateString('sv-SE'),text:$('memoryText').value});$('memoryTitle').value='';$('memoryText').value='';save()}
+function removeItem(type,i){if(!confirm('確定刪除這筆紀錄？'))return;({tasks,expenses,memories}[type]).splice(i,1);save()}
+function render(){
+$('taskList').innerHTML=tasks.map((t,i)=>'<div class="entry"><input type="checkbox" '+(t.done?'checked':'')+' onchange="toggleTask('+i+')"><div style="'+(t.done?'text-decoration:line-through':'')+'">'+esc(t.text)+'</div><button class="del" onclick="removeItem(\'tasks\','+i+')">刪除</button></div>').join('')||'尚無待辦事項';
+$('expenseList').innerHTML=expenses.map((e,i)=>'<div class="entry"><div>'+esc(e.name)+'<br><small>'+esc(e.category)+'</small></div><b>$'+e.amount.toLocaleString()+'</b><button class="del" onclick="removeItem(\'expenses\','+i+')">刪除</button></div>').join('')||'尚無支出紀錄';
+$('memoryList').innerHTML=memories.map((m,i)=>'<div class="card"><small>'+esc(m.date)+'</small><h2>'+esc(m.title)+'</h2><p style="white-space:pre-wrap">'+esc(m.text)+'</p><button class="del" onclick="removeItem(\'memories\','+i+')">刪除</button></div>').join('');
+const total=expenses.reduce((s,e)=>s+e.amount,0);
+$('total').textContent=$('moneySummary').textContent='NT$ '+total.toLocaleString('zh-TW');
+$('taskSummary').textContent=tasks.filter(t=>!t.done).length+' 件待辦事項';
+$('memorySummary').textContent=memories.length+' 則生活回憶';
+}
+render();
+</script>
 </body>
 </html>
