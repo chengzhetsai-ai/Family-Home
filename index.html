@@ -9,22 +9,77 @@
 <title>幸福小家</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#f5f5ef;color:#34463e;font-family:system-ui,sans-serif;padding-bottom:110px}
-header{background:#527861;color:white;padding:24px 20px}
+body{
+ margin:0;
+ background:#f5f5ef;
+ color:#34463e;
+ font-family:system-ui,sans-serif;
+ padding-bottom:110px
+}
+header{
+ background:#527861;
+ color:white;
+ padding:24px 20px
+}
 header h1{margin:0;font-size:26px}
 header small{color:#e5eee5}
 main{max-width:650px;margin:auto;padding:16px}
-.card{background:white;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 2px 8px #00000009;overflow-wrap:anywhere}
+.card{
+ background:white;
+ border-radius:16px;
+ padding:18px;
+ margin-bottom:14px;
+ box-shadow:0 2px 8px #00000009;
+ overflow-wrap:anywhere
+}
 .hero{background:#dfeade}
 h2{font-size:21px;margin:0 0 12px}
-input,textarea,select,button{font:inherit;border-radius:10px}
-input,textarea,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccd5cc;background:white;font-size:16px}
-button{border:0;padding:12px;background:#527861;color:white}
+input,textarea,select,button{
+ font:inherit;
+ border-radius:10px
+}
+input,textarea,select{
+ width:100%;
+ min-width:0;
+ padding:12px;
+ margin:6px 0;
+ border:1px solid #ccd5cc;
+ background:white;
+ font-size:16px
+}
+button{
+ border:0;
+ padding:12px;
+ background:#527861;
+ color:white;
+ cursor:pointer
+}
 .primary{width:100%;margin-top:8px}
-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:white;border-top:1px solid #ddd;padding:8px 0 calc(8px + env(safe-area-inset-bottom))}
-nav button{flex:1;background:white;color:#527861;font-size:12px;padding:8px 0}
+nav{
+ position:fixed;
+ bottom:0;
+ left:0;
+ right:0;
+ display:flex;
+ background:white;
+ border-top:1px solid #ddd;
+ padding:8px 0 calc(8px + env(safe-area-inset-bottom))
+}
+nav button{
+ flex:1;
+ background:white;
+ color:#527861;
+ font-size:12px;
+ padding:8px 0
+}
 nav span{display:block;font-size:24px}
-.entry{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #eee}
+.entry{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ padding:12px 0;
+ border-bottom:1px solid #eee
+}
 .entry input{width:20px}
 .entry div{flex:1;min-width:0}
 .del{background:#f4e5e5;color:#a34b4b}
@@ -32,35 +87,204 @@ nav span{display:block;font-size:24px}
 small{color:#77847b}
 .page{display:none}
 .active{display:block}
+.calendarCard{padding:12px}
+.calHeader{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:8px;
+ margin-bottom:15px
+}
+.calHeader button{padding:8px 12px}
+.calTitle{font-size:20px;font-weight:bold}
+.calendar{
+ display:grid;
+ grid-template-columns:repeat(7,minmax(0,1fr))
+}
+.weekday{
+ text-align:center;
+ padding:10px 0;
+ font-size:13px;
+ color:#77847b
+}
+.weekend{color:#c34e4e!important}
+.day{
+ min-width:0;
+ min-height:78px;
+ background:white;
+ color:#34463e;
+ border-radius:8px;
+ border-top:1px solid #eee;
+ padding:6px 0;
+ text-align:center
+}
+.dayNumber{
+ font-size:19px;
+ font-weight:bold;
+ display:block
+}
+.lunar{
+ font-size:11px;
+ display:block;
+ margin-top:3px;
+ color:#77847b
+}
+.festival{color:#c34e4e}
+.solar{color:#dc892e}
+.today{
+ background:#e5eee5;
+ box-shadow:inset 0 0 0 1px #527861
+}
+.selected{
+ background:#527861!important;
+ color:white!important
+}
+.selected .lunar{color:white}
+.taskMark{
+ display:block;
+ font-size:10px;
+ margin-top:4px;
+ color:#527861
+}
+.selected .taskMark{color:white}
+.dateLabel{
+ font-size:17px;
+ font-weight:bold;
+ margin:12px 0
+}
 </style>
 </head>
 <body>
-<header><h1>🏡 幸福小家</h1><small>FAMILY HOME · Version 0.1</small></header>
+
+<header>
+<h1>🏡 幸福小家</h1>
+<small>FAMILY HOME · Version 0.2</small>
+</header>
+
 <main>
+
 <section id="home" class="page active">
-<div class="card hero"><h2>平凡生活，幸福相伴</h2>一起照顧生活，珍惜每一天。</div>
-<div class="card" onclick="show('life')"><h2>📅 家庭生活</h2><p id="taskSummary"></p></div>
-<div class="card" onclick="show('money')"><h2>💰 家庭財務</h2><div class="amount" id="moneySummary"></div><small>累計支出</small></div>
-<div class="card" onclick="show('memory')"><h2>❤️ 家庭記憶</h2><p id="memorySummary"></p></div>
+
+<div class="card hero">
+<h2>平凡生活，幸福相伴</h2>
+一起照顧生活，珍惜每一天。
+</div>
+
+<div class="card" onclick="show('life')">
+<h2>📅 家庭生活</h2>
+<p id="taskSummary"></p>
+</div>
+
+<div class="card" onclick="show('money')">
+<h2>💰 家庭財務</h2>
+<div class="amount" id="moneySummary"></div>
+<small>累計支出</small>
+</div>
+
+<div class="card" onclick="show('memory')">
+<h2>❤️ 家庭記憶</h2>
+<p id="memorySummary"></p>
+</div>
+
 </section>
+
 <section id="life" class="page">
-<div class="card"><h2>📅 家庭待辦事項</h2><input id="taskInput" placeholder="輸入待辦事項"><button class="primary" onclick="addTask()">＋ 新增事項</button></div>
+
+<div class="card calendarCard">
+
+<div class="calHeader">
+<button onclick="changeMonth(-1)">❮</button>
+<div class="calTitle" id="calTitle"></div>
+<button onclick="changeMonth(1)">❯</button>
+</div>
+
+<div class="calendar" id="calendar"></div>
+
+<button class="primary" onclick="goToday()">
+回到今天
+</button>
+
+</div>
+
+<div class="card">
+<h2>📅 家庭待辦事項</h2>
+<div class="dateLabel" id="selectedDate"></div>
+<input id="taskInput" placeholder="輸入待辦事項">
+<button class="primary" onclick="addTask()">
+＋ 新增事項
+</button>
+</div>
+
 <div class="card" id="taskList"></div>
+
 </section>
+
 <section id="money" class="page">
-<div class="card hero"><h2>累計支出</h2><div class="amount" id="total"></div></div>
-<div class="card"><h2>💰 新增支出</h2><input id="expenseName" placeholder="支出項目"><input id="expenseAmount" type="number" min="1" placeholder="金額"><select id="category"><option>飲食</option><option>日用品</option><option>交通</option><option>教育</option><option>醫療</option><option>其他</option></select><button class="primary" onclick="addExpense()">儲存支出</button></div>
+
+<div class="card hero">
+<h2>累計支出</h2>
+<div class="amount" id="total"></div>
+</div>
+
+<div class="card">
+<h2>💰 新增支出</h2>
+<input id="expenseName" placeholder="支出項目">
+<input id="expenseAmount" type="number" min="1" placeholder="金額">
+
+<select id="category">
+<option>飲食</option>
+<option>日用品</option>
+<option>交通</option>
+<option>教育</option>
+<option>醫療</option>
+<option>其他</option>
+</select>
+
+<button class="primary" onclick="addExpense()">
+儲存支出
+</button>
+</div>
+
 <div class="card" id="expenseList"></div>
+
 </section>
+
 <section id="memory" class="page">
-<div class="card"><h2>❤️ 新增家庭回憶</h2><input id="memoryTitle" placeholder="回憶標題"><input id="memoryDate" type="date"><textarea id="memoryText" rows="4" placeholder="記錄生活點滴"></textarea><button class="primary" onclick="addMemory()">收藏回憶</button></div>
+
+<div class="card">
+<h2>❤️ 新增家庭回憶</h2>
+<input id="memoryTitle" placeholder="回憶標題">
+<input id="memoryDate" type="date">
+<textarea id="memoryText" rows="4" placeholder="記錄生活點滴"></textarea>
+<button class="primary" onclick="addMemory()">
+收藏回憶
+</button>
+</div>
+
 <div id="memoryList"></div>
+
 </section>
+
 <section id="family" class="page">
-<div class="card"><h2>👥 我的家庭</h2><p>幸福小家</p><p>家庭成員：尚未設定</p><p>雲端同步：尚未啟用</p></div>
-<div class="card"><h2>版本資訊</h2><p>Version 0.1</p><small>本機儲存測試版本</small></div>
+
+<div class="card">
+<h2>👥 我的家庭</h2>
+<p>幸福小家</p>
+<p>家庭成員：尚未設定</p>
+<p>雲端同步：尚未啟用</p>
+</div>
+
+<div class="card">
+<h2>版本資訊</h2>
+<p>Version 0.2</p>
+<small>月曆及農曆功能版本</small>
+<p>資料儲存：本機儲存</p>
+</div>
+
 </section>
+
 </main>
+
 <nav>
 <button onclick="show('home')"><span>🏠</span>首頁</button>
 <button onclick="show('life')"><span>📅</span>生活</button>
@@ -68,28 +292,379 @@ small{color:#77847b}
 <button onclick="show('memory')"><span>❤️</span>回憶</button>
 <button onclick="show('family')"><span>👥</span>家庭</button>
 </nav>
+
 <script>
+
 const $=id=>document.getElementById(id);
-function load(key){try{const a=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(a)?a:[]}catch(e){return []}}
-let tasks=load('fh_tasks'),expenses=load('fh_expenses'),memories=load('fh_memories');
-function save(){try{localStorage.setItem('fh_tasks',JSON.stringify(tasks));localStorage.setItem('fh_expenses',JSON.stringify(expenses));localStorage.setItem('fh_memories',JSON.stringify(memories))}catch(e){alert('資料無法儲存')}render()}
-function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0)}
-function esc(s){const d=document.createElement('div');d.textContent=String(s);return d.innerHTML}
-function addTask(){const text=$('taskInput').value.trim();if(!text)return;tasks.push({text,done:false});$('taskInput').value='';save()}
-function toggleTask(i){tasks[i].done=!tasks[i].done;save()}
-function addExpense(){const name=$('expenseName').value.trim(),amount=Number($('expenseAmount').value);if(!name||!Number.isFinite(amount)||amount<=0){alert('請輸入有效的項目及金額');return}expenses.unshift({name,amount,category:$('category').value});$('expenseName').value='';$('expenseAmount').value='';save()}
-function addMemory(){const title=$('memoryTitle').value.trim();if(!title)return;memories.unshift({title,date:$('memoryDate').value||new Date().toLocaleDateString('sv-SE'),text:$('memoryText').value});$('memoryTitle').value='';$('memoryText').value='';save()}
-function removeItem(type,i){if(!confirm('確定刪除這筆紀錄？'))return;({tasks,expenses,memories}[type]).splice(i,1);save()}
-function render(){
-$('taskList').innerHTML=tasks.map((t,i)=>'<div class="entry"><input type="checkbox" '+(t.done?'checked':'')+' onchange="toggleTask('+i+')"><div style="'+(t.done?'text-decoration:line-through':'')+'">'+esc(t.text)+'</div><button class="del" onclick="removeItem(\'tasks\','+i+')">刪除</button></div>').join('')||'尚無待辦事項';
-$('expenseList').innerHTML=expenses.map((e,i)=>'<div class="entry"><div>'+esc(e.name)+'<br><small>'+esc(e.category)+'</small></div><b>$'+e.amount.toLocaleString()+'</b><button class="del" onclick="removeItem(\'expenses\','+i+')">刪除</button></div>').join('')||'尚無支出紀錄';
-$('memoryList').innerHTML=memories.map((m,i)=>'<div class="card"><small>'+esc(m.date)+'</small><h2>'+esc(m.title)+'</h2><p style="white-space:pre-wrap">'+esc(m.text)+'</p><button class="del" onclick="removeItem(\'memories\','+i+')">刪除</button></div>').join('');
-const total=expenses.reduce((s,e)=>s+e.amount,0);
-$('total').textContent=$('moneySummary').textContent='NT$ '+total.toLocaleString('zh-TW');
-$('taskSummary').textContent=tasks.filter(t=>!t.done).length+' 件待辦事項';
-$('memorySummary').textContent=memories.length+' 則生活回憶';
+
+function load(key){
+ try{
+  const a=JSON.parse(localStorage.getItem(key)||'[]');
+  return Array.isArray(a)?a:[];
+ }catch(e){return []}
 }
-render();
+
+let tasks=load('fh_tasks');
+let expenses=load('fh_expenses');
+let memories=load('fh_memories');
+
+function dateKey(d){
+ return d.getFullYear()+'-'+
+ String(d.getMonth()+1).padStart(2,'0')+'-'+
+ String(d.getDate()).padStart(2,'0');
+}
+
+const now=new Date();
+let year=now.getFullYear();
+let month=now.getMonth();
+let selected=dateKey(now);
+
+tasks.forEach(t=>{
+ if(!t.date)t.date=selected;
+});
+
+function save(){
+ try{
+  localStorage.setItem('fh_tasks',JSON.stringify(tasks));
+  localStorage.setItem('fh_expenses',JSON.stringify(expenses));
+  localStorage.setItem('fh_memories',JSON.stringify(memories));
+ }catch(e){
+  alert('資料無法儲存');
+ }
+ render();
+}
+
+function show(id){
+ document.querySelectorAll('.page').forEach(p=>{
+  p.classList.remove('active');
+ });
+ $(id).classList.add('active');
+ window.scrollTo(0,0);
+}
+
+function esc(s){
+ const d=document.createElement('div');
+ d.textContent=String(s);
+ return d.innerHTML;
+}
+
+const lunarFormatter=new Intl.DateTimeFormat(
+ 'zh-TW-u-ca-chinese',
+ {month:'long',day:'numeric',timeZone:'Asia/Taipei'}
+);
+
+const lunarDays=[
+ '','初一','初二','初三','初四','初五',
+ '初六','初七','初八','初九','初十',
+ '十一','十二','十三','十四','十五',
+ '十六','十七','十八','十九','二十',
+ '廿一','廿二','廿三','廿四','廿五',
+ '廿六','廿七','廿八','廿九','三十'
+];
+
+const lunarMonths=[
+ '正月','二月','三月','四月','五月','六月',
+ '七月','八月','九月','十月','冬月','臘月'
+];
+
+const lunarFestivals={
+ '1-1':'春節',
+ '1-15':'元宵節',
+ '2-2':'土地公生',
+ '5-5':'端午節',
+ '7-7':'七夕',
+ '7-15':'中元節',
+ '8-15':'中秋節',
+ '9-9':'重陽節',
+ '10-15':'下元節',
+ '12-8':'臘八節'
+};
+
+const fixedFestivals={
+ '1-1':'元旦',
+ '2-14':'情人節',
+ '2-28':'和平紀念日',
+ '4-4':'兒童節',
+ '5-1':'勞動節',
+ '10-10':'國慶日',
+ '11-12':'國父誕辰',
+ '12-25':'聖誕節'
+};
+
+const termNames=[
+ '小寒','大寒','立春','雨水',
+ '驚蟄','春分','清明','穀雨',
+ '立夏','小滿','芒種','夏至',
+ '小暑','大暑','立秋','處暑',
+ '白露','秋分','寒露','霜降',
+ '立冬','小雪','大雪','冬至'
+];
+
+const termMinutes=[
+ 0,21208,42467,63836,
+ 85337,107014,128867,150921,
+ 173149,195551,218072,240693,
+ 263343,285989,308563,331033,
+ 353350,375494,397447,419210,
+ 440795,462224,483532,504758
+];
+
+function solarTerm(y,m,d){
+ for(let i=m*2;i<m*2+2;i++){
+  const t=new Date(
+   Date.UTC(1900,0,6,2,5)+
+   31556925974.7*(y-1900)+
+   termMinutes[i]*60000
+  );
+  if(t.getUTCDate()===d)return termNames[i];
+ }
+ return '';
+}
+
+function lunarInfo(y,m,d){
+ try{
+  const dt=new Date(Date.UTC(y,m,d,4));
+  const parts=lunarFormatter.formatToParts(dt);
+  const rawMonth=parts.find(p=>p.type==='month')?.value||'';
+  const day=Number(parts.find(p=>p.type==='day')?.value);
+  const leap=/閏|闰/.test(rawMonth);
+  const name=rawMonth.replace(/[閏闰]/g,'');
+  let lm=lunarMonths.indexOf(name)+1;
+  if(name==='十一月')lm=11;
+  if(name==='十二月')lm=12;
+  if(!lm)lm=parseInt(name)||0;
+
+  let festival=leap?'':lunarFestivals[lm+'-'+day];
+
+  if(lm===12&&!leap&&day>=29){
+   const next=lunarFormatter.formatToParts(
+    new Date(Date.UTC(y,m,d+1,4))
+   );
+   const nm=next.find(p=>p.type==='month')?.value;
+   const nd=Number(next.find(p=>p.type==='day')?.value);
+   if((nm==='正月'||nm==='一月')&&nd===1){
+    festival='除夕';
+   }
+  }
+
+  return {
+   label:day===1?rawMonth:(lunarDays[day]||''),
+   festival:festival||''
+  };
+ }catch(e){
+  return {label:'',festival:''};
+ }
+}
+
+function changeMonth(n){
+ const d=new Date(year,month+n,1);
+ year=d.getFullYear();
+ month=d.getMonth();
+ selected=dateKey(d);
+ render();
+}
+
+function goToday(){
+ const d=new Date();
+ year=d.getFullYear();
+ month=d.getMonth();
+ selected=dateKey(d);
+ render();
+}
+
+function selectDay(d){
+ selected=d;
+ render();
+}
+
+function renderCalendar(){
+
+ $('calTitle').textContent=
+ year+' 年 '+(month+1)+' 月';
+
+ const weeks=['日','一','二','三','四','五','六'];
+
+ let html=weeks.map((w,i)=>
+ '<div class="weekday '+
+ (i===0||i===6?'weekend':'')+
+ '">'+w+'</div>'
+ ).join('');
+
+ const first=new Date(year,month,1).getDay();
+ const days=new Date(year,month+1,0).getDate();
+
+ for(let i=0;i<first;i++){
+  html+='<div></div>';
+ }
+
+ for(let d=1;d<=days;d++){
+
+  const dt=new Date(year,month,d);
+  const key=dateKey(dt);
+  const weekday=dt.getDay();
+  const lunar=lunarInfo(year,month,d);
+  const term=solarTerm(year,month,d);
+
+  let festival=fixedFestivals[
+   (month+1)+'-'+d
+  ]||lunar.festival;
+
+  if(month===4&&weekday===0&&d>=8&&d<=14){
+   festival='母親節';
+  }
+
+  if(month===7&&d===8){
+   festival='父親節';
+  }
+
+  if(month===10&&weekday===4&&d>=22&&d<=28){
+   festival='感恩節';
+  }
+
+  const count=tasks.filter(
+   t=>t.date===key&&!t.done
+  ).length;
+
+  let cls='day';
+
+  if(weekday===0||weekday===6)cls+=' weekend';
+  if(key===dateKey(new Date()))cls+=' today';
+  if(key===selected)cls+=' selected';
+
+  const label=festival||term||lunar.label;
+  const style=festival?'festival':term?'solar':'';
+
+  html+='<button class="'+cls+
+   '" onclick="selectDay(\''+key+'\')">'+
+   '<span class="dayNumber">'+d+'</span>'+
+   '<span class="lunar '+style+'">'+
+   esc(label)+'</span>'+
+   (count?'<span class="taskMark">● '+count+'件</span>':'')+
+   '</button>';
+ }
+
+ $('calendar').innerHTML=html;
+
+ $('selectedDate').textContent=
+ '選擇日期：'+selected;
+}
+
+function addTask(){
+ const text=$('taskInput').value.trim();
+ if(!text)return;
+ tasks.push({
+  text:text,
+  date:selected,
+  done:false
+ });
+ $('taskInput').value='';
+ save();
+}
+
+function toggleTask(i){
+ tasks[i].done=!tasks[i].done;
+ save();
+}
+
+function addExpense(){
+ const name=$('expenseName').value.trim();
+ const amount=Number($('expenseAmount').value);
+
+ if(!name||!Number.isFinite(amount)||amount<=0){
+  alert('請輸入有效的項目及金額');
+  return;
+ }
+
+ expenses.unshift({
+  name,
+  amount,
+  category:$('category').value
+ });
+
+ $('expenseName').value='';
+ $('expenseAmount').value='';
+ save();
+}
+
+function addMemory(){
+ const title=$('memoryTitle').value.trim();
+ if(!title)return;
+
+ memories.unshift({
+  title,
+  date:$('memoryDate').value||dateKey(new Date()),
+  text:$('memoryText').value
+ });
+
+ $('memoryTitle').value='';
+ $('memoryText').value='';
+ save();
+}
+
+function removeItem(type,i){
+ if(!confirm('確定刪除這筆紀錄？'))return;
+ ({tasks,expenses,memories}[type]).splice(i,1);
+ save();
+}
+
+function render(){
+
+ renderCalendar();
+
+ $('taskList').innerHTML=tasks.map((t,i)=>{
+
+  if(t.date!==selected)return '';
+
+  return '<div class="entry">'+
+   '<input type="checkbox" '+
+   (t.done?'checked':'')+
+   ' onchange="toggleTask('+i+')">'+
+   '<div style="'+
+   (t.done?'text-decoration:line-through':'')+
+   '">'+esc(t.text)+'</div>'+
+   '<button class="del" onclick="removeItem(\'tasks\','+
+   i+')">刪除</button></div>';
+
+ }).join('')||'當日尚無待辦事項';
+
+ $('expenseList').innerHTML=expenses.map((e,i)=>
+  '<div class="entry"><div>'+
+  esc(e.name)+'<br><small>'+
+  esc(e.category)+'</small></div><b>$'+
+  Number(e.amount).toLocaleString()+
+  '</b><button class="del" onclick="removeItem(\'expenses\','+
+  i+')">刪除</button></div>'
+ ).join('')||'尚無支出紀錄';
+
+ $('memoryList').innerHTML=memories.map((m,i)=>
+  '<div class="card"><small>'+
+  esc(m.date)+'</small><h2>'+
+  esc(m.title)+'</h2>'+
+  '<p style="white-space:pre-wrap">'+
+  esc(m.text)+'</p>'+
+  '<button class="del" onclick="removeItem(\'memories\','+
+  i+')">刪除</button></div>'
+ ).join('');
+
+ const total=expenses.reduce(
+  (s,e)=>s+Number(e.amount),0
+ );
+
+ $('total').textContent=
+ $('moneySummary').textContent=
+ 'NT$ '+total.toLocaleString('zh-TW');
+
+ $('taskSummary').textContent=
+ tasks.filter(t=>!t.done).length+' 件待辦事項';
+
+ $('memorySummary').textContent=
+ memories.length+' 則生活回憶';
+}
+
+$('memoryDate').value=dateKey(new Date());
+
+save();
+
 </script>
 </body>
 </html>
